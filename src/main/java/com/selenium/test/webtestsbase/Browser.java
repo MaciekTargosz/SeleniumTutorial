@@ -8,10 +8,11 @@ public enum  Browser {
     FIREFOX("firefox"),
     CHROME("chrome"),
     IE10("ie10"),
+    IE11("ie11"),
     SAFARI("safari");
     private String browserName;
 
-    private Browser(String browserName) {
+    Browser(String browserName) {
         this.browserName = browserName;
     }
 

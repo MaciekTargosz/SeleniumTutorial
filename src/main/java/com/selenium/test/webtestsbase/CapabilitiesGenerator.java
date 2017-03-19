@@ -25,9 +25,13 @@ public class CapabilitiesGenerator {
                 }
                 return DesiredCapabilities.chrome();
             case IE10:
-                DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
-                caps.setVersion("10");
-                return caps;
+                DesiredCapabilities capsie10 = DesiredCapabilities.internetExplorer();
+                capsie10.setVersion("10");
+                return capsie10;
+            case IE11:
+                DesiredCapabilities capsie11 = DesiredCapabilities.internetExplorer();
+                capsie11.setVersion("11");
+                return capsie11;
             case SAFARI:
                 return new DesiredCapabilities();
             default:

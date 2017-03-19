@@ -22,6 +22,7 @@ public class WebDriverFactory {
     private static final long IMPLICIT_WAIT_TIMEOUT = 5;
     private static WebDriver driver;
     private static final String PATH_TO_CHROMEDRIVER_EXE = "C:\\Training\\Grid\\chromedriver.exe";
+    private static final String PATH_TO_IEDRIVER_EXE = "C:\\Training\\Grid\\IEDriverServer.exe";
 
     /**
      * Getting of pre-configured {@link org.openqa.selenium.WebDriver} instance.
@@ -58,7 +59,22 @@ public class WebDriverFactory {
                         driver = new ChromeDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.CHROME));
                         break;
                     case IE10:
+                        System.setProperty("webdriver.ie.driver", PATH_TO_IEDRIVER_EXE);        // You need to download IEDriverServer executable first and set system property to point to this *.exe file
+                        /*
+                        On IE 7 or higher on Windows Vista or Windows 7, you must set the Protected Mode settings for each zone to be the same value. The value can be on or off, as long as it is the same
+                        for every zone. To set the Protected Mode settings, choose "Internet Options..." from the Tools menu, and click on the Security tab. For each zone, there will be a check box at the
+                        bottom of the tab labeled "Enable Protected Mode".
+                         */
                         driver = new InternetExplorerDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.IE10));
+                        break;
+                    case IE11:
+                        System.setProperty("webdriver.ie.driver", PATH_TO_IEDRIVER_EXE);        // You need to download IEDriverServer executable first and set system property to point to this *.exe file
+                        /*
+                        On IE 7 or higher on Windows Vista or Windows 7, you must set the Protected Mode settings for each zone to be the same value. The value can be on or off, as long as it is the same
+                        for every zone. To set the Protected Mode settings, choose "Internet Options..." from the Tools menu, and click on the Security tab. For each zone, there will be a check box at the
+                        bottom of the tab labeled "Enable Protected Mode".
+                         */
+                        driver = new InternetExplorerDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.IE11));
                         break;
                     case SAFARI:
                         driver = new SafariDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.SAFARI));
