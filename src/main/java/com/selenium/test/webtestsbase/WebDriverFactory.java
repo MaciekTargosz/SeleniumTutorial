@@ -18,8 +18,10 @@ import java.util.concurrent.TimeUnit;
  * All communications with driver should be done through this class
  */
 public class WebDriverFactory {
+
     private static final long IMPLICIT_WAIT_TIMEOUT = 5;
     private static WebDriver driver;
+    private static final String PATH_TO_CHROMEDRIVER_EXE = "C:\\Training\\Grid\\chromedriver.exe";
 
     /**
      * Getting of pre-configured {@link org.openqa.selenium.WebDriver} instance.
@@ -52,6 +54,7 @@ public class WebDriverFactory {
                         driver = new FirefoxDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.FIREFOX));
                         break;
                     case CHROME:
+                        System.setProperty("webdriver.chrome.driver", PATH_TO_CHROMEDRIVER_EXE); // You need to download chromedriver executable first and set system property to point to this *.exe file
                         driver = new ChromeDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.CHROME));
                         break;
                     case IE10:
