@@ -23,6 +23,7 @@ public class WebDriverFactory {
     private static WebDriver driver;
     private static final String PATH_TO_CHROMEDRIVER_EXE = "C:\\Training\\Grid\\chromedriver.exe";
     private static final String PATH_TO_IEDRIVER_EXE = "C:\\Training\\Grid\\IEDriverServer.exe";
+    private static final String PATH_TO_FIREFOXDRIVER_EXE = "C:\\Training\\Grid\\geckodriver.exe";
 
     /**
      * Getting of pre-configured {@link org.openqa.selenium.WebDriver} instance.
@@ -52,6 +53,7 @@ public class WebDriverFactory {
             } else {
                 switch (browser) {
                     case FIREFOX:
+                        System.setProperty("webdriver.gecko.driver", PATH_TO_FIREFOXDRIVER_EXE);
                         driver = new FirefoxDriver(CapabilitiesGenerator.getDefaultCapabilities(Browser.FIREFOX));
                         break;
                     case CHROME:
