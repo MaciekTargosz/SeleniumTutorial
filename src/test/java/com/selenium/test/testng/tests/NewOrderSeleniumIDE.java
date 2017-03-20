@@ -3,6 +3,11 @@ package com.selenium.test.testng.tests;
 
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
+
+import com.selenium.test.webtestsbase.WebDriverFactory;
+import org.openqa.selenium.lift.HamcrestWebDriverTestCase;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
@@ -11,30 +16,34 @@ import org.openqa.selenium.support.ui.Select;
 
 public class NewOrderSeleniumIDE {
     private WebDriver driver;
-    private String baseUrl;
+    WebDriverWait wait;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
+    private static final String BASE_URL = "http://localhost";
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
-        driver = new FirefoxDriver();
-        baseUrl = "https://localhost/";
+        WebDriverFactory.startBrowser(true);
+        driver = WebDriverFactory.getDriver();
+        wait = new WebDriverWait(driver, 5);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
     @Test
     public void testNewOrderSeleniumIDE() throws Exception {
-        driver.get(baseUrl + "/opencart/");
+        driver.get(BASE_URL + "/opencart/");
         driver.findElement(By.xpath("//form[@id='form-language']/div/button")).click();
         driver.findElement(By.name("pl-PL")).click();
+        driver.findElement(By.linkText("Akcesoria")).click();
         driver.findElement(By.linkText("Monitory (2)")).click();
         driver.findElement(By.xpath("(//button[@type='button'])[15]")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//button[@type='button'])[8]")));
         driver.findElement(By.xpath("(//button[@type='button'])[8]")).click();
+        driver.findElement(By.xpath("//div[@id='cart']/button")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='cart']/ul/li[2]/div/p/a[2]/strong")));
         driver.findElement(By.xpath("//div[@id='cart']/ul/li[2]/div/p/a[2]/strong")).click();
         driver.findElement(By.xpath("(//input[@name='account'])[2]")).click();
         driver.findElement(By.id("button-account")).click();
-        driver.findElement(By.id("input-payment-firstname")).clear();
-        driver.findElement(By.id("input-payment-firstname")).sendKeys("Maciej");
         driver.findElement(By.id("input-payment-firstname")).clear();
         driver.findElement(By.id("input-payment-firstname")).sendKeys("Tester");
         driver.findElement(By.id("input-payment-lastname")).clear();
@@ -55,8 +64,10 @@ public class NewOrderSeleniumIDE {
         driver.findElement(By.name("comment")).clear();
         driver.findElement(By.name("comment")).sendKeys("Komentarz do testowego zamówienia");
         driver.findElement(By.id("button-shipping-method")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("agree")));
         driver.findElement(By.name("agree")).click();
         driver.findElement(By.id("button-payment-method")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("button-confirm")));
         driver.findElement(By.id("button-confirm")).click();
         driver.findElement(By.linkText("Kontynuuj")).click();
     }
