@@ -16,7 +16,11 @@ public class NewOrderSeleniumIDE {
     WebDriverWait wait;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
+    private static final String LANGUAGE = "Polski";
+    private static final String ITEM = "Samsung SyncMaster 941BW";
     private static final String BASE_URL = "http://localhost";
+    private static final String CATEGORY = "Akcesoria";
+    private static final String SUBCATEGORY = "Monitory";
     private static final String COUNTRY = "Poland";
     private static final String REGION = "Malopolskie";
     private static final String COMMENT = "Komentarz do testowego zamówienia";
@@ -39,9 +43,9 @@ public class NewOrderSeleniumIDE {
     @Test
     public void shouldCreateNewOrderWithoutRegistration() throws Exception {
         openLandingPage();
-        changeLanguage();
-        navigateToMonitorsCategory();
-        addItemToCart();
+        changeLanguage(LANGUAGE);
+        navigateToProductList(CATEGORY, SUBCATEGORY);
+        addItemToCart(ITEM);
         showCartItemsList();
         goToOrderDetails();
         selectGuestCheckoutOption();
@@ -160,14 +164,18 @@ public class NewOrderSeleniumIDE {
         driver.findElement(By.xpath("(//button[@type='button'])[15]")).click();
     }
 
-    private void navigateToMonitorsCategory() {
-        driver.findElement(By.linkText("Akcesoria")).click();
-        driver.findElement(By.linkText("Monitory (2)")).click();
+    private void addItemToCart(String itemName) {
+        driver.findElement(By.xpath("//div[./div/h4/a[contains(text(),'" + itemName + "')]]/div[contains(@class,'button-group')]/button[contains(@onclick,'cart')]")).click();
     }
 
-    private void changeLanguage(){
+    private void navigateToProductList(String category, String subcategory) {
+        driver.findElement(By.linkText(category)).click();
+        driver.findElement(By.partialLinkText(subcategory)).click();
+    }
+
+    private void changeLanguage(String language){
         driver.findElement(By.xpath("//form[@id='form-language']/div/button")).click();
-        driver.findElement(By.name("pl-PL")).click();
+        driver.findElement(By.xpath("//button[contains(text(),'" + language + "')]")).click();
     }
 
     private void openLandingPage() {
