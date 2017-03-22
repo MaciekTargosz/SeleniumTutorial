@@ -31,6 +31,7 @@ public class NewOrderSeleniumIDE {
     private static final String ADDRESS = "Testowa 7";
     private static final String CITY = "Testowo";
     private static final String POST_CODE = "39-100";
+    private static final String ORDER_HASS_BEEN_PLACED_MESSAGE = "Twoje zamówienie zostało przyjęte!";
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -65,11 +66,17 @@ public class NewOrderSeleniumIDE {
         agreeToTermsAndConditions();
         clickContinuePaymentMethod();
         clickConfirmOrder();
-        clickContinue();
+
+        assertEquals(getOrderConfirmationMessageText(), ORDER_HASS_BEEN_PLACED_MESSAGE, "Confirmation message should be displayed.");
     }
 
     private void clickContinue() {
         driver.findElement(By.linkText("Kontynuuj")).click();
+    }
+
+    private String getOrderConfirmationMessageText(){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'breadcrumb')]/li/a[contains(@href, 'checkout/success')]")));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@id,'content')]/h1"))).getText();
     }
 
     private void clickConfirmOrder() {
