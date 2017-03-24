@@ -3,15 +3,20 @@ package com.selenium.test.testng.tests;
 
 import java.util.concurrent.TimeUnit;
 
+import com.selenium.test.pages.LandingPage;
+import com.selenium.test.pages.OrderDetailsPage;
+import com.selenium.test.pages.ProductListPage;
+import com.selenium.test.to.Address;
+import com.selenium.test.to.Buyer;
 import com.selenium.test.webtestsbase.WebDriverFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.Select;
 
 public class NewOrderSeleniumIDE {
+
     private WebDriver driver;
     WebDriverWait wait;
     private boolean acceptNextAlert = true;
@@ -19,19 +24,31 @@ public class NewOrderSeleniumIDE {
     private static final String LANGUAGE = "Polski";
     private static final String ITEM = "Samsung SyncMaster 941BW";
     private static final String BASE_URL = "http://localhost";
-    private static final String CATEGORY = "Akcesoria";
-    private static final String SUBCATEGORY = "Monitory";
-    private static final String COUNTRY = "Poland";
-    private static final String REGION = "Malopolskie";
+    private static final String CATEGORY = /*"Akcesoria"*/"Components";
+    private static final String SUBCATEGORY = /*"Monitory"*/"Monitors";
     private static final String COMMENT = "Komentarz do testowego zamówienia";
-    private static final String FIRST_NAME = "Tester";
-    private static final String LAST_NAME = "Testerski";
-    private static final String EMAIL = "mactar.training@gmail.com";
-    private static final String PHONE = "123654789";
-    private static final String ADDRESS = "Testowa 7";
-    private static final String CITY = "Testowo";
-    private static final String POST_CODE = "39-100";
     private static final String ORDER_HASS_BEEN_PLACED_MESSAGE = "Twoje zamówienie zostało przyjęte!";
+
+    @DataProvider(name = "buyerAndAddressData")
+    public Object[][] createData1() {
+
+        Buyer buyer = new Buyer();
+        buyer.setFirstName("Tester");
+        buyer.setLastName("Testerski");
+        buyer.setEmail("mactar.training@gmail.com");
+        buyer.setPhone("123654789");
+
+        Address address = new Address()
+                .withAddressPart1("Testowa 7")
+                .withCity("Testowo")
+                .withPostCode("39-100")
+                .withCountry("Poland")
+                .withRegion("Malopolskie");
+
+        return new Object[][] {
+                {buyer, address},
+        };
+    }
 
     @BeforeClass(alwaysRun = true)
     public void setUp() throws Exception {
@@ -41,31 +58,23 @@ public class NewOrderSeleniumIDE {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    @Test
-    public void shouldCreateNewOrderWithoutRegistration() throws Exception {
-        openLandingPage();
-        changeLanguage(LANGUAGE);
-        navigateToProductList(CATEGORY, SUBCATEGORY);
-        addItemToCart(ITEM);
-        showCartItemsList();
-        goToOrderDetails();
-        selectGuestCheckoutOption();
-        clickContinueCheckoutOptions();
-        typeFirstName(FIRST_NAME);
-        typeLastName(LAST_NAME);
-        typeEmailAddress(EMAIL);
-        typePhoneNumber(PHONE);
-        typeAddressPart1(ADDRESS);
-        typeCity(CITY);
-        typePostCode(POST_CODE);
-        selectCountry(COUNTRY);
-        selectRegionOrState(REGION);
-        clickContinueBillingDetails();
-        typeDeliveryMethodComment(COMMENT);
-        clickContinueDeliveryMethod();
-        agreeToTermsAndConditions();
-        clickContinuePaymentMethod();
-        clickConfirmOrder();
+    @Test(dataProvider = "buyerAndAddressData")
+    public void shouldCreateNewOrderWithoutRegistration(Buyer buyer, Address address) throws Exception {
+        new LandingPage()
+                .changeLanguage(LANGUAGE)
+                .goToProductList(CATEGORY, SUBCATEGORY)
+                    .addItemToCart(ITEM)
+                    .showCartItemsList()
+                    .goToOrderDetails()
+                        .selectGuestCheckoutOption()
+                        .clickContinueCheckoutOptions()
+                        .fillBuyerAndAddressData(buyer, address)
+                        .clickContinueBillingDetails()
+                        .typeDeliveryMethodComment(COMMENT)
+                        .clickContinueDeliveryMethod()
+                        .agreeToTermsAndConditions()
+                        .clickContinuePaymentMethod()
+                        .clickConfirmOrder();
 
         assertEquals(getOrderConfirmationMessageText(), ORDER_HASS_BEEN_PLACED_MESSAGE, "Confirmation message should be displayed.");
     }
@@ -77,116 +86,6 @@ public class NewOrderSeleniumIDE {
     private String getOrderConfirmationMessageText(){
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[contains(@class,'breadcrumb')]/li/a[contains(@href, 'checkout/success')]")));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@id,'content')]/h1"))).getText();
-    }
-
-    private void clickConfirmOrder() {
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("button-confirm")));
-        driver.findElement(By.id("button-confirm")).click();
-    }
-
-    private void clickContinuePaymentMethod() {
-        driver.findElement(By.id("button-payment-method")).click();
-    }
-
-    private void agreeToTermsAndConditions() {
-        wait.until(ExpectedConditions.elementToBeClickable(By.name("agree")));
-        driver.findElement(By.name("agree")).click();
-    }
-
-    private void clickContinueDeliveryMethod() {
-        driver.findElement(By.id("button-shipping-method")).click();
-    }
-
-    private void typeDeliveryMethodComment(String comment) {
-        driver.findElement(By.name("comment")).clear();
-        driver.findElement(By.name("comment")).sendKeys(comment);
-    }
-
-    private void clickContinueBillingDetails() {
-        driver.findElement(By.id("button-guest")).click();
-    }
-
-    private void selectRegionOrState(String region) {
-        new Select(driver.findElement(By.id("input-payment-zone"))).selectByVisibleText(region);
-    }
-
-    private void selectCountry(String countryName) {
-        new Select(driver.findElement(By.id("input-payment-country"))).selectByVisibleText(countryName);
-    }
-
-    private void typePostCode(String postCode) {
-        driver.findElement(By.id("input-payment-postcode")).clear();
-        driver.findElement(By.id("input-payment-postcode")).sendKeys(postCode);
-    }
-
-    private void typeCity(String city) {
-        driver.findElement(By.id("input-payment-city")).clear();
-        driver.findElement(By.id("input-payment-city")).sendKeys(city);
-    }
-
-    private void typeAddressPart1(String address) {
-        driver.findElement(By.id("input-payment-address-1")).clear();
-        driver.findElement(By.id("input-payment-address-1")).sendKeys(address);
-    }
-
-    private void typePhoneNumber(String phone) {
-        driver.findElement(By.id("input-payment-telephone")).clear();
-        driver.findElement(By.id("input-payment-telephone")).sendKeys(phone);
-    }
-
-    private void typeEmailAddress(String email) {
-        driver.findElement(By.id("input-payment-email")).clear();
-        driver.findElement(By.id("input-payment-email")).sendKeys(email);
-    }
-
-    private void typeLastName(String lastName) {
-        driver.findElement(By.id("input-payment-lastname")).clear();
-        driver.findElement(By.id("input-payment-lastname")).sendKeys(lastName);
-    }
-
-    private void typeFirstName(String firstName) {
-        driver.findElement(By.id("input-payment-firstname")).clear();
-        driver.findElement(By.id("input-payment-firstname")).sendKeys(firstName);
-    }
-
-    private void clickContinueCheckoutOptions() {
-        driver.findElement(By.id("button-account")).click();
-    }
-
-    private void selectGuestCheckoutOption() {
-        driver.findElement(By.xpath("(//input[@name='account'])[2]")).click();
-    }
-
-    private void goToOrderDetails() {
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@id='cart']/ul/li[2]/div/p/a[2]/strong")));
-        driver.findElement(By.xpath("//div[@id='cart']/ul/li[2]/div/p/a[2]/strong")).click();
-    }
-
-    private void showCartItemsList() {
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(//button[@type='button'])[8]")));
-        driver.findElement(By.xpath("(//button[@type='button'])[8]")).click();
-    }
-
-    private void addItemToCart() {
-        driver.findElement(By.xpath("(//button[@type='button'])[15]")).click();
-    }
-
-    private void addItemToCart(String itemName) {
-        driver.findElement(By.xpath("//div[./div/h4/a[contains(text(),'" + itemName + "')]]/div[contains(@class,'button-group')]/button[contains(@onclick,'cart')]")).click();
-    }
-
-    private void navigateToProductList(String category, String subcategory) {
-        driver.findElement(By.linkText(category)).click();
-        driver.findElement(By.partialLinkText(subcategory)).click();
-    }
-
-    private void changeLanguage(String language){
-        driver.findElement(By.xpath("//form[@id='form-language']/div/button")).click();
-        driver.findElement(By.xpath("//button[contains(text(),'" + language + "')]")).click();
-    }
-
-    private void openLandingPage() {
-        driver.get(BASE_URL + "/opencart/");
     }
 
     @AfterClass(alwaysRun = true)

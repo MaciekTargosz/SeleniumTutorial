@@ -31,6 +31,8 @@ public class TestsConfig {
     @Property("browser.version")
     private String version = "";
 
+    @Property("base.url")
+    private static String baseURL = "http://localhost";
 
     /**
      * getting browser object
@@ -53,5 +55,8 @@ public class TestsConfig {
         return version;
     }
 
+    public static String getBaseURL(){
+        return baseURL;
+    }
 
 }

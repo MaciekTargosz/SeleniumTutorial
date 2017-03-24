@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Selenium tutorial project</name>
-    <description>Web Autotests simple project. </description>
+    <description>Web Autotests simple project.</description>
     <url>http://maven.apache.org</url>
 
     <properties>
@@ -45,6 +45,12 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

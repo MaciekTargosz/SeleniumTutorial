@@ -1,15 +1,19 @@
 package com.selenium.test.webtestsbase;
 
 import com.selenium.test.utils.TimeUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Created by Sidelnikov Mikhail on 19.09.14.
  * This is the main class for pages. When you create your page - you must extend your class from this
  */
 public abstract class BasePage {
+
     protected static final int WAIT_FOR_PAGE_LOAD_IN_SECONDS = 5;
+    public WebDriverWait wait;
     /**
      * In subclasses  should be used for page opening
      */
@@ -25,6 +29,7 @@ public abstract class BasePage {
         if(openPageByUrl){
             openPage();
         }
+        wait = new WebDriverWait(getDriver(), 5);
         PageFactory.initElements(getDriver(), this);
         waitForOpen();
     }
