@@ -2,6 +2,7 @@ package com.selenium.test.pages;
 
 import com.selenium.test.to.Address;
 import com.selenium.test.to.Buyer;
+import com.selenium.test.utils.ActionBot;
 import com.selenium.test.webtestsbase.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -85,9 +86,8 @@ public class OrderDetailsPage extends BasePage {
         return this;
     }
 
-    public OrderDetailsPage typeDeliveryMethodComment(String comment) {
-        getDriver().findElement(By.name("comment")).clear();                // will change when ActionBot introduced
-        getDriver().findElement(By.name("comment")).sendKeys(comment);
+    public OrderDetailsPage typeDeliveryMethodComment(String commentText) {
+        new ActionBot(getDriver()).type(By.name("comment"), commentText);
         return this;
     }
 
@@ -102,8 +102,7 @@ public class OrderDetailsPage extends BasePage {
     }
 
     public OrderDetailsPage agreeToTermsAndConditions() {
-        wait.until(ExpectedConditions.elementToBeClickable(By.name("agree"))); // will change when ActionBot introduced
-        getDriver().findElement(By.name("agree")).click();
+        new ActionBot(getDriver()).waitUntilElementClickableAndClickOnIt(By.name("agree"), 5);
         return this;
     }
 
@@ -121,37 +120,30 @@ public class OrderDetailsPage extends BasePage {
     }
 
     private void typePostCode(String postCode) {
-        getDriver().findElement(By.id("input-payment-postcode")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-postcode")).sendKeys(postCode);
+        new ActionBot(getDriver()).type(By.id("input-payment-postcode"), postCode);
     }
 
     private void typeCity(String city) {
-        getDriver().findElement(By.id("input-payment-city")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-city")).sendKeys(city);
+        new ActionBot(getDriver()).type(By.id("input-payment-city"), city);
     }
 
     private void typeAddressPart1(String address) {
-        getDriver().findElement(By.id("input-payment-address-1")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-address-1")).sendKeys(address);
+        new ActionBot(getDriver()).type(By.id("input-payment-address-1"), address);
     }
 
     private void typePhoneNumber(String phone) {
-        getDriver().findElement(By.id("input-payment-telephone")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-telephone")).sendKeys(phone);
+        new ActionBot(getDriver()).type(By.id("input-payment-telephone"), phone);
     }
 
     private void typeEmailAddress(String email) {
-        getDriver().findElement(By.id("input-payment-email")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-email")).sendKeys(email);
+        new ActionBot(getDriver()).type(By.id("input-payment-email"), email);
     }
 
     private void typeLastName(String lastName) {
-        getDriver().findElement(By.id("input-payment-lastname")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-lastname")).sendKeys(lastName);
+        new ActionBot(getDriver()).type(By.id("input-payment-lastname"), lastName);
     }
 
     private void typeFirstName(String firstName) {
-        getDriver().findElement(By.id("input-payment-firstname")).clear(); // will change when ActionBot introduced
-        getDriver().findElement(By.id("input-payment-firstname")).sendKeys(firstName);
+        new ActionBot(getDriver()).type(By.id("input-payment-firstname"), firstName);
     }
 }

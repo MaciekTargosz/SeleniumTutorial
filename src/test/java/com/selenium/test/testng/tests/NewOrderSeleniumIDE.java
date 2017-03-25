@@ -55,7 +55,7 @@ public class NewOrderSeleniumIDE {
         WebDriverFactory.startBrowser(true);
         driver = WebDriverFactory.getDriver();
         wait = new WebDriverWait(driver, 5);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
     @Test(dataProvider = "buyerAndAddressData")
